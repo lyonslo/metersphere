@@ -13,23 +13,6 @@
               </el-form-item>
             </el-form>
           </el-col>
-<!--          <el-col :span="6">
-            <el-form>
-              <el-form-item :label="$t('api_test.automation.follow_people')">
-                <el-select v-model="test.follows"
-                           clearable
-                           :placeholder="$t('api_test.automation.follow_people')" multiple filterable size="small">
-                  <el-option
-                    v-for="item in maintainerOptions"
-                    :key="item.id"
-                    :label="item.id + ' (' + item.name + ')'"
-                    :value="item.id">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-form>
-
-          </el-col>-->
           <el-col :span="12">
             <el-tooltip :content="$t('commons.follow')" placement="bottom"  effect="dark" v-if="!showFollow">
               <i class="el-icon-star-off" style="color: #783987; font-size: 25px; margin-right: 15px;cursor: pointer;position: relative; top: 5px; " @click="saveFollow" />
@@ -37,9 +20,15 @@
             <el-tooltip :content="$t('commons.cancel')" placement="bottom"  effect="dark" v-if="showFollow">
               <i class="el-icon-star-on" style="color: #783987; font-size: 28px;  margin-right: 15px;cursor: pointer;position: relative; top: 5px; " @click="saveFollow" />
             </el-tooltip>
+
             <el-link type="primary" size="small" style="margin-right: 20px" @click="openHis" v-if="test.id">
               {{ $t('operating_log.change_history') }}
             </el-link>
+            <ms-version-history v-xpack
+                                ref="versionHistory"
+                                :version-data="versionData"
+                                :current-id="testId"
+                                @compare="compare" @checkout="checkout" @create="create" @del="del"/>
             <el-button :disabled="isReadOnly" type="primary" size="small" plain @click="save"
                        v-permission="['PROJECT_PERFORMANCE_TEST:READ+EDIT']"
             >{{ $t('commons.save') }}
@@ -96,11 +85,14 @@ import PerformancePressureConfig from "./components/PerformancePressureConfig";
 import PerformanceAdvancedConfig from "./components/PerformanceAdvancedConfig";
 import MsContainer from "../../common/components/MsContainer";
 import MsMainContainer from "../../common/components/MsMainContainer";
-import {getCurrentProjectID, getCurrentUser, getCurrentWorkspaceId, hasPermission} from "@/common/js/utils";
+import {getCurrentProjectID, getCurrentUser, getCurrentWorkspaceId, hasLicense, hasPermission} from "@/common/js/utils";
 import MsScheduleConfig from "../../common/components/MsScheduleConfig";
 import MsChangeHistory from "../../history/ChangeHistory";
 import MsTableOperatorButton from "@/business/components/common/components/MsTableOperatorButton";
 import MsTipButton from "@/business/components/common/components/MsTipButton";
+
+const requireComponent = require.context('@/business/components/xpack/', true, /\.vue$/);
+const versionHistory = requireComponent.keys().length > 0 ? requireComponent("./version/VersionHistory.vue") : {};
 
 export default {
   name: "EditPerformanceTest",
@@ -113,7 +105,8 @@ export default {
     PerformanceAdvancedConfig,
     MsContainer,
     MsMainContainer,
-    MsChangeHistory
+    MsChangeHistory,
+    'MsVersionHistory': versionHistory.default,
   },
   inject: [
     'reload'
@@ -144,6 +137,7 @@ export default {
         component: 'PerformanceAdvancedConfig'
       }],
       maintainerOptions: [],
+      versionData: [],
     };
   },
   watch: {
@@ -166,6 +160,9 @@ export default {
   created() {
     this.isReadOnly = !hasPermission('PROJECT_PERFORMANCE_TEST:READ+EDIT');
     this.getTest(this.$route.params.testId);
+    if (hasLicense()) {
+      this.getVersionHistory();
+    }
   },
   mounted() {
     this.importAPITest();
@@ -267,24 +264,31 @@ export default {
             if (!this.test.schedule) {
               this.test.schedule = {};
             }
-            this.$get('/performance/test/follow/' + testId, response => {
-              this.$set(this.test, 'follows', response.data);
-              for (let i = 0; i < this.test.follows.length; i++) {
-                if(this.test.follows[i]===this.currentUser().id){
-                  this.showFollow = true;
-                  break;
-                }
-              }
-            });
+            this.getDefaultFollow(testId);
           }
         });
       }
+    },
+    getDefaultFollow(testId){
+      this.$get('/performance/test/follow/' + testId, response => {
+        this.$set(this.test, 'follows', response.data);
+        for (let i = 0; i < this.test.follows.length; i++) {
+          if(this.test.follows[i]===this.currentUser().id){
+            this.showFollow = true;
+            break;
+          }
+        }
+      });
     },
     save() {
       if (!this.validTest()) {
         return;
       }
-
+      if (!this.test.versionId) {
+        if (this.$refs.versionHistory) {
+          this.test.versionId = this.$refs.versionHistory.currentVersion.id;
+        }
+      }
       let options = this.getSaveOption();
 
       this.result = this.$request(options, () => {
@@ -336,7 +340,6 @@ export default {
       formData.append('request', new Blob([requestJson], {
         type: "application/json"
       }));
-
       return {
         method: 'POST',
         url: url,
@@ -509,6 +512,47 @@ export default {
           });
         }
       }
+    },
+    getVersionHistory() {
+      let testId = undefined
+      if(this.testId){
+        testId = this.testId;
+      }
+      this.$get('/performance/versions/' + testId, response => {
+        this.versionData = response.data;
+      });
+    },
+    compare(row) {
+      // console.log(row);
+    },
+    checkout(row) {
+      //let test = this.versionData.filter(v => v.versionId === row.id)[0];
+      this.test.versionId = row.id;
+      this.result = this.$get('/performance/get/' +  this.test.versionId+"/"+this.test.refId, response => {
+        this.testId = response.data.id;
+        this.$router.push({
+          path: '/performance/test/edit/' + this.testId,
+        });
+        this.getVersionHistory();
+      });
+    },
+    create(row) {
+      // 创建新版本
+      this.test.versionId = row.id;
+      this.save();
+    },
+    del(row) {
+      this.$alert(this.$t('load_test.delete_confirm') + ' ' + row.name + " ？", '', {
+        confirmButtonText: this.$t('commons.confirm'),
+        callback: (action) => {
+          if (action === 'confirm') {
+            this.$get('performance/delete/' + row.id + '/' + this.test.refId, () => {
+              this.$success(this.$t('commons.delete_success'));
+              this.getVersionHistory();
+            });
+          }
+        }
+      });
     }
   }
 };

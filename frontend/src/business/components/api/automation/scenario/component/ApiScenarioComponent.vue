@@ -22,6 +22,7 @@
           <i class="el-icon-warning"/>
         </el-tooltip>
       </span>
+      <span v-xpack v-if="scenario.versionEnable">{{$t('project.version.name')}}: {{ scenario.versionName }}</span>
     </template>
 
     <template v-slot:behindHeaderLeft>
@@ -128,6 +129,8 @@ export default {
             this.scenario.num = response.data.num;
             this.getWorkspaceId(response.data.projectId);
           }
+          this.scenario.versionName = response.data.versionName;
+          this.scenario.versionEnable = response.data.versionEnable;
           this.scenario.name = response.data.name;
           this.scenario.headers = obj.headers;
           this.scenario.variables = obj.variables;
@@ -142,9 +145,11 @@ export default {
           if(response.data.num){
             this.scenario.num = response.data.num;
             this.getWorkspaceId(response.data.projectId);
-          }else {
+          } else {
             this.isSameSpace = false
           }
+          this.scenario.versionName = response.data.versionName;
+          this.scenario.versionEnable = response.data.versionEnable;
         } else {
           this.isSameSpace = false
         }

@@ -201,8 +201,8 @@ export default {
     run_success: "执行成功",
     run_completed: "执行完成",
     run_fail: "执行失败",
-    follow_success:"关注成功",
-    cancel_follow_success:"取消关注成功",
+    follow_success: "关注成功",
+    cancel_follow_success: "取消关注成功",
     type: "类型",
     relationship: {
       name: '依赖关系',
@@ -361,12 +361,12 @@ export default {
     system_project: "项目",
     user_unit: "人",
     workspace_unit: "个",
-    dash_board:'仪表盘',
-    all_project:'全部项目',
-    to_be_completed:'待完成',
-    pending_upgrade:'待更新',
-    information:'信息',
-    nick_name:'昵称',
+    dash_board: '仪表盘',
+    all_project: '全部项目',
+    to_be_completed: '待完成',
+    pending_upgrade: '待更新',
+    information: '信息',
+    nick_name: '昵称',
     resourceId:'资源ID',
     level:'级别',
     num:'数量',
@@ -391,25 +391,25 @@ export default {
     invalid: '无效',
     expired: '已过期',
   },
-  workstation:{
+  workstation: {
     dash_board: '我的仪表盘',
     upcoming: '我的待办',
     focus: '我的关注',
     creation: '我创建的',
-    creation_case:'我创建的用例',
-    creation_issue:'我创建的缺陷',
-    creation_case_tip:'暂时还没有创建用例，马上创建',
-    creation_issue_tip:'暂时还没有创建缺陷，马上创建',
-    table_name:{
-      track_case:'功能用例',
-      track_plan:'测试计划',
-      track_review:'用例评审',
-      track_issue:'缺陷管理',
-      api_definition:'接口定义',
-      api_automation:'接口自动化',
-      api_case:'接口用例',
-      performance:'性能测试',
-      scenario_case:'场景用例'
+    creation_case: '我创建的用例',
+    creation_issue: '我创建的缺陷',
+    creation_case_tip: '暂时还没有创建用例，马上创建',
+    creation_issue_tip: '暂时还没有创建缺陷，马上创建',
+    table_name: {
+      track_case: '功能用例',
+      track_plan: '测试计划',
+      track_review: '用例评审',
+      track_issue: '缺陷管理',
+      api_definition: '接口定义',
+      api_automation: '接口自动化',
+      api_case: '接口用例',
+      performance: '性能测试',
+      scenario_case: '场景用例'
     }
   },
   display: {
@@ -593,10 +593,10 @@ export default {
       zentao_request: '请求方式',
       input_zentao_request: '请输入Zentao请求方式',
       input_zentao_url: '请输入Zentao地址，例：http://xx.xx.xx.xx/zentao/',
-      zentao_info:'禅道信息',
-      zentao_account:'禅道账户',
-      zentao_password:'禅道密码',
-      zentao_prompt_information:'该信息为通过禅道提交缺陷的的用户名、密码，若未填写，则使用工作空间中配置的默认信息',
+      zentao_info: '禅道信息',
+      zentao_account: '禅道账户',
+      zentao_password: '禅道密码',
+      zentao_prompt_information: '该信息为通过禅道提交缺陷的的用户名、密码，若未填写，则使用工作空间中配置的默认信息',
       use_tip: '使用指引：',
       use_tip_tapd: 'Tapd Basic Auth 账号信息在"公司管理-安全与集成-开放平台"中查询',
       use_tip_jira: 'Jira software server 认证信息为 账号密码，Jira software cloud 认证信息为 账号+令牌(账户设置-安全-创建API令牌)',
@@ -623,7 +623,7 @@ export default {
       input_azure_url: '请输入 Azure Devops 地址',
       input_azure_organization_id: '请输入 Azure 组织ID',
       use_tip_azure: 'Azure Devops 地址+令牌(账户设置-个人访问令牌-创建令牌)',
-      jira_prompt_information:'该信息为通过Jira提交缺陷的用户认证信息，若未填写，则使用工作空间中配置的默认信息'
+      jira_prompt_information: '该信息为通过Jira提交缺陷的用户认证信息，若未填写，则使用工作空间中配置的默认信息'
     }
   },
   project: {
@@ -704,6 +704,20 @@ export default {
     test_case_custom_id_info: '测试用例自定义ID \n 用例ID默认为系统自增ID',
     scenario_custom_id: '场景自定义ID',
     scenario_custom_id_info: '场景自定义ID \n 场景用例ID默认为系统自增ID',
+    version: {
+      name: '版本',
+      create_version: '创建版本',
+      edit_version: '编辑版本',
+      version_closed: '已关闭',
+      version_open: '未关闭',
+      publish_time: '发布时间',
+      start_time: '开始时间',
+      end_time: '结束时间',
+      delete_version: '删除版本',
+      please_input_version: '请输入版本',
+      tips: '注意: 已关闭的版本不会出现在系统字段<strong>版本</strong>下拉框选项中',
+      enable: '启用版本管理',
+    }
   },
   member: {
     create: '添加成员',
@@ -1026,7 +1040,7 @@ export default {
         update_time: "更新时间"
       },
       expect_detail: "期望详情",
-      request_condition:"请求触发条件",
+      request_condition: "请求触发条件",
       base_info: "基本信息",
       req_param: "请求参数",
       rsp_param: "响应内容",
@@ -1056,7 +1070,7 @@ export default {
       create_tip: "注: 详细的接口信息可以在编辑页面填写",
       api_import: "接口导入",
       check_select: "请勾选接口",
-      api_project:"所属项目",
+      api_project: "所属项目",
       select_comp: {
         no_data: "无数据",
         add_data: "去添加"
@@ -1237,9 +1251,9 @@ export default {
         select_table: "选择可见数据",
         select_all: "选择全部数据",
         check_case: "请勾选场景用例",
-        api_none:"原始API不存在",
-        case_none:"原始CASE不存在",
-        num_none:"原始场景不存在"
+        api_none: "原始API不存在",
+        case_none: "原始CASE不存在",
+        num_none: "原始场景不存在"
       },
       report_name_info: '请输入报告名称',
       save_case_info: '请先保存用例',
@@ -2045,7 +2059,7 @@ export default {
       title: "缺陷标题",
       description: "缺陷描述",
       status: "缺陷状态",
-      issue_project:"所属项目",
+      issue_project: "所属项目",
       platform: "平台",
       operate: "操作",
       close: "关闭缺陷",
@@ -2335,7 +2349,7 @@ export default {
     before_change: "变更前",
     after_change: "变更后",
     share: "分享",
-    change_history: "变更历史",
+    change_history: "变更记录",
     change_content: "变更内容"
   },
   plugin: {

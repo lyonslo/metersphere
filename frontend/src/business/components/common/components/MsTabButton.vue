@@ -4,20 +4,22 @@
     <el-button-group v-if="isShowChangeButton">
 
       <el-tooltip v-if="leftButtonEnable" class="item" effect="dark" :content="leftTip" placement="left">
-        <el-button plain style="height: 32px;padding: 5px 8px;"  :class="{active: leftActive}" @click="changeTab('left')">{{leftContent}}</el-button>
+        <el-button plain style="height: 32px; padding: 5px; width: 50px;"  :class="{active: leftActive}" @click="changeTab('left')">{{leftContent}}</el-button>
       </el-tooltip>
 
       <el-tooltip v-if="middleButtonEnable" class="item" effect="dark" :content="middleTip" placement="top">
-        <el-button plain style="height: 32px;padding: 1px;"  :class="{active: middleActive}" @click="changeTab('middle')">{{middleContent}}</el-button>
+        <el-button plain style="height: 32px; padding: 5px; width: 50px"  :class="{active: middleActive}" @click="changeTab('middle')">{{middleContent}}</el-button>
       </el-tooltip>
 
       <el-tooltip v-if="rightButtonEnable" class="item" effect="dark" :content="rightTip" placement="right">
-        <el-button plain  style="height: 32px;padding: 1px;"  :class="{active: rightActive}" @click="changeTab('right')">
+        <el-button plain  style="height: 32px; padding: 5px; width: 50px"  :class="{active: rightActive}" @click="changeTab('right')">
           {{rightContent}}
         </el-button>
       </el-tooltip>
 
     </el-button-group>
+
+    <slot name="version"></slot>
 
     <template v-slot:header>
       <slot name="header"></slot>
